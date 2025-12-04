@@ -93,14 +93,7 @@ nav a{
   position:relative;
 }
 nav a::after{
-  content:'';
-  position:absolute;
-  bottom:-4px;
-  left:0;
-  width:0%;
-  height:2px;
-  background:var(--accent);
-  transition:0.3s;
+  content:''; position:absolute; bottom:-4px; left:0; width:0%; height:2px; background:var(--accent); transition:0.3s;
 }
 nav a:hover::after{width:100%;}
 
@@ -378,28 +371,46 @@ function showTab(tabId){
   document.getElementById(tabId).classList.add('active');
 }
 
-// Email functionality using fetch with CAPTCHA
+// Email functionality using fetch with Render backend
 document.getElementById('sendBtn').addEventListener('click', function(){
-  const name = document.getElementById('name').value;
-  const email = document.getElementById('email').value;
-  const subject = document.getElementById('subject').value || "Portfolio Contact";
-  const message = document.getElementById('message').value;
-  const captcha = document.getElementById('captcha').value;
+  const name = document.getElementById('name').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const subject = document.getElementById('subject').value.trim() || "Portfolio Contact";
+  const message = document.getElementById('message').value.trim();
+  const captcha = document.getElementById('captcha').value.trim();
 
   if(!name || !email || !message || !captcha){
     alert("Please fill all required fields and solve the CAPTCHA!");
     return;
   }
 
-  // Updated to Render backend URL
-  fetch('https://tesfish_backend.onrender.com/send_email.php', {
+  const backendURL = 'https://tesfish_backend.onrender.com/send_email.php';
+
+  fetch(backendURL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: `name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&subject=${encodeURIComponent(subject)}&message=${encodeURIComponent(message)}&captcha=${encodeURIComponent(captcha)}`
   })
-  .then(res => res.json())
-  .then(data => alert(data.message))
-  .catch(err => alert('Error sending message: ' + err));
+  .then(res => {
+    if (!res.ok) throw new Error('Network response was not ok');
+    return res.json();
+  })
+  .then(data => {
+    if(data.success){
+      alert(data.message);
+      document.getElementById('name').value = '';
+      document.getElementById('email').value = '';
+      document.getElementById('subject').value = '';
+      document.getElementById('message').value = '';
+      document.getElementById('captcha').value = '';
+    } else {
+      alert(data.message || 'Failed to send message.');
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    alert('Error sending message. Please try again later.');
+  });
 });
 </script>
 
