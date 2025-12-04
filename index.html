@@ -357,9 +357,8 @@ footer{
       <p style="margin-top:15px;font-weight:bold;">You can also reach me directly:</p>
       <p>Email: tesfishanegese2023@gmail.com</p>
       <p>Phone: +251 931 435 146</p>
-      <p>GitHub: <a href="https://github.com/yourusername" style="color:var(--accent);" target="_blank">Tesfaye</a></p>
-      <p>LinkedIn: <a href="https://www.linkedin.com/in/tesfaye-negese-tufa-11ba712b9
-" style="color:var(--accent);" target="_blank">tesfaye_negese</a></p>
+      <p>GitHub: <a href="https://github.com/Tesfaye46" style="color:var(--accent);" target="_blank">Tesfaye</a></p>
+      <p>LinkedIn: <a href="https://www.linkedin.com/in/tesfaye-negese-tufa-11ba712b9" style="color:var(--accent);" target="_blank">tesfaye_negese</a></p>
     </section>
   </div>
 
@@ -392,7 +391,8 @@ document.getElementById('sendBtn').addEventListener('click', function(){
     return;
   }
 
-  fetch('send_email.php', {
+  // Updated to Render backend URL
+  fetch('https://tesfish_backend.onrender.com/send_email.php', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: `name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&subject=${encodeURIComponent(subject)}&message=${encodeURIComponent(message)}&captcha=${encodeURIComponent(captcha)}`
