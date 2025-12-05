@@ -14,7 +14,6 @@
   --radius:14px;
   font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
 }
-
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{
   background:var(--bg);
@@ -93,7 +92,14 @@ nav a{
   position:relative;
 }
 nav a::after{
-  content:''; position:absolute; bottom:-4px; left:0; width:0%; height:2px; background:var(--accent); transition:0.3s;
+  content:'';
+  position:absolute;
+  bottom:-4px;
+  left:0;
+  width:0%;
+  height:2px;
+  background:var(--accent);
+  transition:0.3s;
 }
 nav a:hover::after{width:100%;}
 
@@ -350,8 +356,9 @@ footer{
       <p style="margin-top:15px;font-weight:bold;">You can also reach me directly:</p>
       <p>Email: tesfishanegese2023@gmail.com</p>
       <p>Phone: +251 931 435 146</p>
-      <p>GitHub: <a href="https://github.com/Tesfaye46" style="color:var(--accent);" target="_blank">Tesfaye</a></p>
-      <p>LinkedIn: <a href="https://www.linkedin.com/in/tesfaye-negese-tufa-11ba712b9" style="color:var(--accent);" target="_blank">tesfaye_negese</a></p>
+      <p>GitHub: <a href="https://github.com/yourusername" style="color:var(--accent);" target="_blank">Tesfaye</a></p>
+      <p>LinkedIn: <a href="https://www.linkedin.com/in/tesfaye-negese-tufa-11ba712b9
+" style="color:var(--accent);" target="_blank">tesfaye_negese</a></p>
     </section>
   </div>
 
@@ -371,46 +378,27 @@ function showTab(tabId){
   document.getElementById(tabId).classList.add('active');
 }
 
-// Email functionality using fetch with Render backend
+// Email functionality using fetch with CAPTCHA
 document.getElementById('sendBtn').addEventListener('click', function(){
-  const name = document.getElementById('name').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const subject = document.getElementById('subject').value.trim() || "Portfolio Contact";
-  const message = document.getElementById('message').value.trim();
-  const captcha = document.getElementById('captcha').value.trim();
+  const name = document.getElementById('name').value;
+  const email = document.getElementById('email').value;
+  const subject = document.getElementById('subject').value || "Portfolio Contact";
+  const message = document.getElementById('message').value;
+  const captcha = document.getElementById('captcha').value;
 
   if(!name || !email || !message || !captcha){
     alert("Please fill all required fields and solve the CAPTCHA!");
     return;
   }
 
-  const backendURL = 'https://tesfish_backend.onrender.com/send_email.php';
-
-  fetch(backendURL, {
+  fetch('https://tesfish-backend.onrender.com/send_email.php', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: `name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&subject=${encodeURIComponent(subject)}&message=${encodeURIComponent(message)}&captcha=${encodeURIComponent(captcha)}`
   })
-  .then(res => {
-    if (!res.ok) throw new Error('Network response was not ok');
-    return res.json();
-  })
-  .then(data => {
-    if(data.success){
-      alert(data.message);
-      document.getElementById('name').value = '';
-      document.getElementById('email').value = '';
-      document.getElementById('subject').value = '';
-      document.getElementById('message').value = '';
-      document.getElementById('captcha').value = '';
-    } else {
-      alert(data.message || 'Failed to send message.');
-    }
-  })
-  .catch(err => {
-    console.error(err);
-    alert('Error sending message. Please try again later.');
-  });
+  .then(res => res.json())
+  .then(data => alert(data.message))
+  .catch(err => alert('Error sending message: ' + err));
 });
 </script>
 
